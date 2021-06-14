@@ -28,3 +28,4 @@ def sanitize_providers(providers: []):
         tmp_prov = Munch.fromDict(prov)
         providers_object.append(tmp_prov)
     return providers_object
+

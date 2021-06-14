@@ -3,12 +3,12 @@ from django.contrib.auth.models import User, Group
 from rest_framework.response import Response
 from .worker import setup, utils
 from munch import Munch
-from root_app.models import Provider, Rule, Pricing, Project, Attribute, Criteria, Atom
+from root_app.models import Provider, Rule, Pricing, Project, Attribute, Criteria, Atom, Condition
 from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from root_app.serializers import UserSerializer, \
     GroupSerializer, ProviderSerializer, RuleSerializer, PricingSerializer, ProjectSerializer, AttributeSerializer, \
-    CriteriaSerializer, AtomSerializer
+    CriteriaSerializer, AtomSerializer, ConditionSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -117,4 +117,10 @@ class CriteriaViewSet(viewsets.ModelViewSet):
 class AtomViewSet(viewsets.ModelViewSet):
     queryset = Atom.objects.all().order_by('id')
     serializer_class = AtomSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ConditionViewSet(viewsets.ModelViewSet):
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer
     permission_classes = [permissions.IsAuthenticated]

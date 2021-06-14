@@ -61,8 +61,12 @@ class Criteria(models.Model):
     vh_rate = models.IntegerField()
 
 
+class Condition(models.Model):
+    condition = jsonfield.JSONField()
+
+
 class Atom(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    complexity = jsonfield.JSONField()
-    criticality = jsonfield.JSONField()
-    availability = jsonfield.JSONField()
+    status = models.BooleanField()
+    criteria = models.ForeignKey(Criteria, on_delete=models.CASCADE)
+    condition = models.ForeignKey(Condition, on_delete=models.CASCADE)

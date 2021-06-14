@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from root_app.models import Provider, Rule, Pricing, Project, Attribute, Criteria, Atom
+from root_app.models import Provider, Rule, Pricing, Project, Attribute, Criteria, Atom, Condition
 from rest_framework import serializers
 
 
@@ -54,4 +54,10 @@ class CriteriaSerializer(serializers.HyperlinkedModelSerializer):
 class AtomSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Atom
+        fields = '__all__'
+
+
+class ConditionSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Condition
         fields = '__all__'
