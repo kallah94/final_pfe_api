@@ -8,7 +8,7 @@ def sanitize_atoms(atoms: []):
     for atom in atoms:
         tmp_atom = Munch.fromDict(atom)
         atoms_object.append(tmp_atom)
-        atoms_names.append(tmp_atom.name)
+        atoms_names.append(tmp_atom.criteria)
     return Munch.fromDict(dict(zip(atoms_names, atoms_object)))
 
 

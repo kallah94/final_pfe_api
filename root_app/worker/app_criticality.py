@@ -4,16 +4,43 @@ All functions in this section refer to the criticality of an application
 from root_app.models import Project
 
 
-def environment_rating(env, criticality):
-    return criticality.conditions[env] if criticality.status == 1 else 0
+def environment_rating(env, conditions):
+    env_rate = 0
+    env_conditions = [cond for cond in conditions if ((cond.condField == 'environment') & (cond.condSeuil == env))]
+    try:
+        for cond in env_conditions:
+            env_rate += cond.condValue
+        env_rate = env_rate/len(env_conditions)
+        print(env_rate)
+        return env_rate
+    except:
+        return env_rate
 
 
-def architecture_rating(architecture, criticality):
-    return criticality.conditions[architecture] if criticality.status == 1 else 0
+def architecture_rating(architecture, conditions):
+    arch_rate = 0
+    arch_conditions = [cond for cond in conditions if ((cond.condField == 'architecture') & (cond.condSeuil == architecture))]
+    try:
+        for cond in arch_conditions:
+            arch_rate += cond.condValue
+        arch_rate = arch_rate / len(arch_conditions)
+        print(arch_rate)
+        return arch_rate
+    except:
+        return arch_rate
 
 
-def type_application_rating(type_application, criticality):
-    return criticality.conditions[type_application] if criticality.status == 1 else 0
+def type_application_rating(type_application, conditions):
+    ta_rate = 0
+    ta_conditions = [cond for cond in conditions if ((cond.condField == 'type_application') & (cond.condSeuil == type_application))]
+    try:
+        for cond in ta_conditions:
+            ta_rate += cond.condValue
+        ta_rate = ta_rate / len(ta_conditions)
+        print(ta_rate)
+        return ta_rate
+    except:
+        return ta_rate
 
 
 def sla_rating(sla, criticality):
@@ -38,13 +65,9 @@ def data_size_rating(data_size, criticality):
         return criticality.conditions[str(index)] if criticality.status == 1 else 0
 
 
-def rating(project: Project, atoms):
+def rating(project: Project, criticality):
     rat = 0
-    rat += environment_rating(project.environment, atoms.environment.criticality)
-    rat += architecture_rating(project.architecture, atoms.architecture.criticality)
-    rat += sla_rating(project.sla, atoms.sla.criticality)
-    rat += type_application_rating(project.type_application, atoms.type_application.criticality)
-    rat += flux_rating(project.flux, atoms.flux.criticality)
-    rat += data_size_rating(project.data_size, atoms.data_size.criticality)
+    rat += environment_rating(project.environment, criticality.condition)
+    rat += architecture_rating(project.architecture, criticality.condition)
     print(" project criticality rate ", rat)
     return rat

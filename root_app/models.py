@@ -3,9 +3,6 @@ import jsonfield
 
 
 class Provider(models.Model):
-    """
-    Model that hold the provider criterion values
-    """
     name = models.CharField(max_length=30, unique=True)
     flexibility = models.IntegerField()
     maturity = models.IntegerField()
@@ -18,7 +15,6 @@ class Provider(models.Model):
 class Attribute(models.Model):
     name = models.CharField(max_length=100, unique=True)
     weight = models.IntegerField()
-    percentage = models.DecimalField(max_digits=4, decimal_places=2)
     type = models.CharField(max_length=10)
 
 
@@ -49,6 +45,8 @@ class Project(models.Model):
     dependencies = jsonfield.JSONField()
     flux = jsonfield.JSONField()
     data_size = models.IntegerField()
+    cpu = models.IntegerField()
+    ram = models.IntegerField()
     owner = models.CharField(max_length=255)
 
 
@@ -66,7 +64,5 @@ class Condition(models.Model):
 
 
 class Atom(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    status = models.BooleanField()
-    criteria = models.ForeignKey(Criteria, on_delete=models.CASCADE)
-    condition = models.ForeignKey(Condition, on_delete=models.CASCADE)
+    criteria = models.CharField(max_length=255, unique=True)
+    condition = jsonfield.JSONField()
