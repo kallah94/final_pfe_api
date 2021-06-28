@@ -1,6 +1,7 @@
 import decimal
+import operator
 
-from . import app_criticality, app_complexity, app_availability
+from . import process_value_attribute
 from root_app.models import Project
 import numpy as np
 from topsis import topsis
@@ -13,8 +14,21 @@ which be used when the application type is not set
 
 
 def cloud_ready_rate(project: Project, atoms, rule):
-    app_vector = [app_complexity.rating(project, atoms), app_criticality.rating(project, atoms),
-                  app_availability.rating(project, atoms)]
+
+    try:
+        app_criticality = process_value_attribute.rating(project, atoms.criticality)
+    except:
+        app_criticality = 0
+    try:
+        app_complexity = process_value_attribute.rating(project, atoms.complexity)
+    except:
+        app_complexity = 0
+    try:
+        app_availability = process_value_attribute.rating(project, atoms.availability)
+    except:
+        app_availability = 0
+    app_vector = [app_criticality, app_complexity, app_availability]
+
     rule_vector = [rule.complexity, rule.criticality, rule.availability]
     app_vector = np.array(app_vector),
     rule_vector = np.array(rule_vector)
@@ -46,7 +60,7 @@ def attributes_type_matrix(attributes):
 def attributes_weight_matrix(attributes):
     attributes_weight = []
     for attr in attributes:
-        attributes_weight.append(decimal.Decimal(attr.percentage))
+        attributes_weight.append(decimal.Decimal(attr.weight))
     return attributes_weight
 
 
@@ -82,5 +96,6 @@ def providers_raking(providers, attributes_names, attributes):
     decision = topsis(providers_rows, weights, types)
     decision.calc()
     scores = decision.C.tolist()
-    result = list(map(lambda item: {'provider': item[0], 'score': item[1]}, zip(providers_names, scores)))
+    result = list(map(lambda item: {'provider': item[0], 'score': item[1]*100}, zip(providers_names, scores)))
+    result.sort(key=operator.itemgetter('score'), reverse=True)
     return result

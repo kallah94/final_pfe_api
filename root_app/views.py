@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
 from rest_framework.response import Response
-from .worker import setup, utils, app_criticality
+from .worker import setup, utils, process_value_attribute
 from munch import Munch
 from root_app.models import Provider, Rule, Pricing, Project, Attribute, Criteria, Atom, Condition
 from rest_framework import permissions, viewsets, status
@@ -98,10 +98,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
         rule = Munch.fromDict(serializer_rule.data)
         atoms = serializer_atom.data
         all_atoms = utils.sanitize_atoms(atoms)
-        #print(all_atoms)
-        app_criticality.rating(project, all_atoms.criticality)
-        #response = setup.ready_rep(project, all_atoms, rule)
-        return Response(atoms, status=status.HTTP_200_OK)
+        response = setup.ready_rep(project, all_atoms, rule)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class AttributeViewSet(viewsets.ModelViewSet):
