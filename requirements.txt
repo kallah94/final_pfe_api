@@ -2,7 +2,6 @@ Django==3.0.5
 djangorestframework_jwt==1.11.0
 django_jsonfield==1.4.1
 djangorestframework==3.12.4
-
 djangorestframework-jwt~=1.11.0
 numpy~=1.20.3
 munch~=2.5.0

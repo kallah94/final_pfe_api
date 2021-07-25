@@ -3,7 +3,7 @@ import jsonfield
 
 
 class Provider(models.Model):
-    name = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=30)
     flexibility = models.IntegerField()
     maturity = models.IntegerField()
     data_security = models.IntegerField()
@@ -13,17 +13,17 @@ class Provider(models.Model):
 
 
 class Attribute(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     weight = models.IntegerField()
     type = models.CharField(max_length=10)
 
 
 class Rule(models.Model):
-    name = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=30)
     criticality = models.IntegerField()
     complexity = models.IntegerField()
     availability = models.IntegerField()
-    type = models.CharField(max_length=30, unique=True)
+    type = models.CharField(max_length=30)
 
 
 class Pricing(models.Model):
@@ -36,7 +36,7 @@ class Pricing(models.Model):
 
 
 class Project(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     architecture = models.CharField(max_length=30)
     costEstimation = models.DecimalField(max_digits=10, decimal_places=2)
     type_application = models.CharField(max_length=30)
@@ -51,7 +51,7 @@ class Project(models.Model):
 
 
 class Criteria(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
     vl_rate = models.IntegerField()
     l_rate = models.IntegerField()
     m_rate = models.IntegerField()
@@ -64,5 +64,5 @@ class Condition(models.Model):
 
 
 class Atom(models.Model):
-    criteria = models.CharField(max_length=255, unique=True)
+    criteria = models.CharField(max_length=255)
     condition = jsonfield.JSONField()
