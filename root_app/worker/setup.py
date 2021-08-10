@@ -32,19 +32,29 @@ def cloud_ready_rate(project: Project, atoms, rule):
     rule_vector = [rule.complexity, rule.criticality, rule.availability]
     app_vector = np.array(app_vector),
     rule_vector = np.array(rule_vector)
-    score = (np.dot(app_vector, rule_vector) / (np.linalg.norm(app_vector) * np.linalg.norm(rule_vector))).item(0)
-    return score if score > 0 else 0
+    rule_norm = np.linalg.norm(rule_vector)
+    app_norm = np.linalg.norm(app_vector)
+    print(app_vector)
+    print(rule_vector)
+    score = (np.dot(app_vector, rule_vector) / (app_norm * rule_norm)).item(0)
+    contraint = app_norm/rule_norm
+    contraint_ref = rule.contraint/100 + 1
+    constraint_bool = False if contraint > contraint_ref else True
+    return score if score > 0 else 0, constraint_bool
 
 
 def ready_rep(project: Project, atoms, rule):
-    score = cloud_ready_rate(project, atoms, rule) * 100
-    if score >= 80:
-        return {"score": score, "message": "votre application est parfaitement compatible avec le cloud public"}
-    if score >= 50:
-        return {"score": score, "message": "votre application est assez compatible avec le cloud public"}
+    score = cloud_ready_rate(project, atoms, rule)[0] * 100
+    norm_constraint = cloud_ready_rate(project, atoms, rule)[1]
+    if norm_constraint:
+        if score >= 80:
+            return {"score": score, "message": "votre application est parfaitement compatible avec le cloud public"}
+        if score >= 50:
+            return {"score": score, "message": "votre application est assez compatible avec le cloud public"}
+        else:
+            return {"score": score, "message":"votre application n'est pas tout a fait compatible avec le cloud public"}
     else:
-        return {"score": score, "message":"votre application n'est pas tout a fait compatible avec le cloud public"}
-
+        return {"score": 0, "message":"Application non compatible"}
 
 def cost_compare():
     return None

@@ -24,6 +24,7 @@ class Rule(models.Model):
     complexity = models.IntegerField()
     availability = models.IntegerField()
     type = models.CharField(max_length=30)
+    contraint = models.IntegerField(default=20)
 
 
 class Pricing(models.Model):
